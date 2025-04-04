@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accounts - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
+      <h2 class="bank-name">CSUSB Bank</h2>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/accounts" class="active">Accounts</a>
+        <a href="/loans">Loans</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="topbar">
+        <h1>Accounts Overview</h1>
+      </div>
+
+      <section class="content-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>Account ID</th>
+              <th>Balance</th>
+              <th>Overdraft (Checking)</th>
+              <th>Interest Rate (Saving)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for account in accounts %}
+            <tr>
+              <td>{{ account.customer_name }}</td>
+              <td>{{ account.account_id }}</td>
+              <td>${{ '%.2f' | format(account.balance) }}</td>
+              <td>
+                {% if account.overdraft_amount %}
+                  ${{ '%.2f' | format(account.overdraft_amount) }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td>
+                {% if account.interest_rate %}
+                  {{ account.interest_rate }}%
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
