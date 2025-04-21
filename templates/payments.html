@@ -16,9 +16,12 @@
 
       <h1 class="text-primary mb-3">CSUSB Credit Union<br>Payment Center</h1>
       <p class="mb-4">Using the box below, please enter an amout you'd like to pay today.</p>
-      <p><input type="number" style="text-align:center;" name="payment" class="form-control" placeholder="$1000" required></p>
-
-      <button class="btn btn-primary w-100">Sumbit Payment</button>
+      <form method="POST" action="/payments">
+        <p>
+          <input type="number" style="text-align:center;" name="payment" class="form-control" placeholder="$1000" required>
+        </p>
+        <button class="btn btn-primary w-100">Sumbit Payment</button>
+      </form>
     </div>
   </div>
 

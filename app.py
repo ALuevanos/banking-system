@@ -166,9 +166,19 @@ def payments():
         JOIN loan l ON p.loan_id = l.loan_id
     """)
     data = cursor.fetchall()
+    
+    # Calcuation: Total payments sum
+    total_paymennts = sum(payments['pay_amount'] for payment in data)
+    
+    # calculattion: Grouped payments by loan_id
+    payments_by_loan = {}
+    for payment in data:
+        loan_id = payment['loan_id']
+        payments_by_loan[loan_id] = payments_by_loan.get(loan_id, 0) + payment['pay_amount']
+    
     cursor.close()
     conn.close()
-    return render_template('payments.html', payments=data)
+    return render_template('payments.html', payments=data, total_payments=total_paymennts, payments_by_loan=payments_by_loan)
 
 # Employees
 @app.route('/employees')
