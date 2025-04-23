@@ -158,27 +158,25 @@ def loans():
 def payments():
     if 'admin' not in session:
         return redirect('/login')
+
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-        SELECT p.payment_no, p.pay_amount, p.payment_day, l.loan_id
+        SELECT p.payment_no, p.pay_amount, p.payment_day, l.loan_id, c.name AS customer_name
         FROM payment p
         JOIN loan l ON p.loan_id = l.loan_id
+        JOIN borrow b ON l.loan_id = b.loan_id
+        JOIN customer c ON b.customer_id = c.customer_id
+        ORDER BY p.payment_day DESC
     """)
     data = cursor.fetchall()
-    
-    # Calcuation: Total payments sum
-    total_paymennts = sum(payments['pay_amount'] for payment in data)
-    
-    # calculattion: Grouped payments by loan_id
-    payments_by_loan = {}
-    for payment in data:
-        loan_id = payment['loan_id']
-        payments_by_loan[loan_id] = payments_by_loan.get(loan_id, 0) + payment['pay_amount']
-    
+    total_payments = sum(p['pay_amount'] for p in data)
+
     cursor.close()
     conn.close()
-    return render_template('payments.html', payments=data, total_payments=total_paymennts, payments_by_loan=payments_by_loan)
+
+    return render_template('payments.html', payments=data, total_payments=total_payments)
+
 
 # Employees
 @app.route('/employees')
