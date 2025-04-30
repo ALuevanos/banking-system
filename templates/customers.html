@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Customers - CSUSB Bank</title>
+  <title>Dashboard - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
@@ -14,14 +14,15 @@
       <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
       <h2 class="bank-name">CSUSB Bank</h2>
       <nav class="nav-links">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/customers" class="active">Customers</a>
+        <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/customers">Customers</a>
         <a href="/accounts">Accounts</a>
         <a href="/loans">Loans</a>
+        <a href="/payments">Payments</a>
+        <a href="/transactions">Transactions</a>
         <a href="/logout">Logout</a>
       </nav>
     </aside>
-
     
     <main class="main-content">
       <div class="topbar">

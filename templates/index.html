@@ -14,10 +14,12 @@
       
       <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Credit Union Bank Logo" class="logo mb-3">
 
-      <h1 class="text-primary mb-3">Welcome to CSUSB<br>Credit Union Bank</h1>
+      <h1 class="text-primary mb-3">Welcome </h1>
       <p class="mb-4">Admin portal for managing accounts, loans, and customer data.</p>
 
       <a href="/login" class="btn btn-success login-btn"> Admin Login</a>
+      <a href="{{ url_for('customer_login') }}" class="btn btn-secondary mt-2">Customer Login</a>
+
     </div>
   </div>
 

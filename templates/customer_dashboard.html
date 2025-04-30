@@ -1,0 +1,48 @@
+<!-- customer_dashboard.html -->
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card p-4">
+    <h2>Welcome, {{ customer.name }}</h2>
+    <p><strong>Email:</strong> {{ customer.email }}</p>
+    <hr>
+
+    <h4>Your Accounts</h4>
+    {% if customer_accounts %}
+      <table class="table table-bordered">
+        <thead><tr><th>Account Type</th><th>Balance</th></tr></thead>
+        <tbody>
+          {% for acc in customer_accounts %}
+            <tr>
+              <td>{{ acc.account_type }}</td>
+              <td>${{ acc.balance }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No accounts found.</p>
+    {% endif %}
+
+    <h4>Your Loans</h4>
+    {% if customer_loans %}
+      <table class="table table-bordered">
+        <thead><tr><th>Loan ID</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for loan in customer_loans %}
+            <tr>
+              <td>{{ loan.loan_id }}</td>
+              <td>${{ loan.amount }}</td>
+              <td>{{ loan.status }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No loans found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('customer_logout') }}" class="btn btn-danger mt-3">Logout</a>
+  </div>
+</div>
+{% endblock %}

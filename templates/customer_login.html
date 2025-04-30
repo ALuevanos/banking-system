@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow" style="min-width: 400px;">
+    <div class="text-center mb-4">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" style="width: 100px;">
+      <h3 class="mt-2">Customer Login</h3>
+    </div>
+
+    <form method="POST">
+      <div class="mb-3">
+        <label for="customer_id" class="form-label">Customer ID:</label>
+        <input type="text" class="form-control" name="customer_id" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" class="form-control" name="password" required>
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('register') }}">Don’t have an account? Register</a><br>
+      <a href="{{ url_for('index') }}" class="text-secondary mt-2 d-block">← Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
