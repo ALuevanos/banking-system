@@ -1,12 +1,18 @@
-
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container mt-5">
   <div class="card p-4">
+    <!-- Logo -->
+    <div class="text-center mb-3">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" style="width: 100px;">
+    </div>
+
+    <!-- Welcome -->
     <h2>Welcome, {{ customer.name }}</h2>
     <p><strong>Email:</strong> {{ customer.email }}</p>
     <hr>
 
+    <!-- Accounts -->
     <h4>Your Accounts</h4>
     {% if customer_accounts %}
       <table class="table table-bordered">
@@ -24,6 +30,7 @@
       <p>No accounts found.</p>
     {% endif %}
 
+    <!-- Loans -->
     <h4>Your Loans</h4>
     {% if customer_loans %}
       <table class="table table-bordered">
@@ -42,7 +49,15 @@
       <p>No loans found.</p>
     {% endif %}
 
-    <a href="{{ url_for('customer_logout') }}" class="btn btn-danger mt-3">Logout</a>
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{{ url_for('deposit') }}" class="btn btn-success">Deposit</a>
+      <a href="{{ url_for('withdraw') }}" class="btn btn-warning">Withdraw</a>
+      <a href="{{ url_for('pay_loan') }}" class="btn btn-info">Pay Loan</a>
+    </div>
+
+    <!-- Logout -->
+    <a href="{{ url_for('customer_logout') }}" class="btn btn-primary mt-4 w-100">Logout</a>
   </div>
 </div>
 {% endblock %}

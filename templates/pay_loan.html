@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card p-4 shadow">
+    <h3 class="text-center mb-4">Pay Loan</h3>
+    
+    {% if loan %}
+      <p><strong>Loan ID:</strong> {{ loan.loan_id }}</p>
+      <p><strong>Loan Amount:</strong> ${{ loan.amount }}</p>
+
+      <form method="POST">
+        <div class="mb-3">
+          <label for="pay_amount" class="form-label">Payment Amount:</label>
+          <input type="number" class="form-control" name="pay_amount" min="1" step="0.01" required>
+        </div>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-info">Pay Loan</button>
+        </div>
+      </form>
+    {% else %}
+      <p>No active loans found.</p>
+    {% endif %}
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('customer.customer_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
