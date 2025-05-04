@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Employee - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <img src="{{ url_for('static', filename='assets/logo.png') }}" class="sidebar-logo" />
+    <h2 class="bank-name">CSUSB Bank</h2>
+    <nav class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/employees" class="active">Employees</a>
+      <a href="/customers">Customers</a>
+      <a href="/accounts">Accounts</a>
+      <a href="/loans">Loans</a>
+      <a href="/payments">Payments</a>
+      <a href="/transactions">Transactions</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="topbar">
+      <h1>Add New Employee</h1>
+    </div>
+
+    <form method="POST" class="form-section">
+      <label>Name:</label>
+      <input type="text" name="name" required />
+
+      <label>Start Date:</label>
+      <input type="date" name="start_date" required />
+
+      <label>Phone Number:</label>
+      <input type="text" name="phone_no" required />
+
+      <button type="submit" class="btn">Add Employee</button>
+    </form>
+  </main>
+</div>
+</body>
+</html>

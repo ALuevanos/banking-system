@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - CSUSB Bank</title>
+  <title>New Branch - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
 <body>
   <div class="container">
-    
     <aside class="sidebar">
       <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
       <h2 class="bank-name">CSUSB Bank</h2>
@@ -20,56 +19,54 @@
         <a href="/loans">Loans</a>
         <a href="/payments">Payments</a>
         <a href="/transactions">Transactions</a>
+        <a href="/branches">Branches</a>
+        <a href="/employees">Employees</a>
         <a href="/logout">Logout</a>
       </nav>
     </aside>
 
-   
-    <main class="main-content">
-      <div class="topbar">
-        <h1>Welcome Back, Admin </h1>
-        
-      </div>
 
-      
-      <section class="cards">
-        <div class="card income">
+    <main class="main-content">
+      <h1>Welcome Back, Admin</h1>
+
+      <section class="summary-cards">
+        <div class="card">
           <h3>Total Income</h3>
-          <p>$632,000</p>
+          <p>${{ total_income }}</p>
         </div>
-        <div class="card outcome">
+        <div class="card">
           <h3>Total Outcome</h3>
-          <p>$632,000</p>
+          <p>${{ total_outcome }}</p>
         </div>
-        <div class="card balance">
+        <div class="card">
           <h3>Current Balance</h3>
-          <p>$5,750.20</p>
+          <p>${{ current_balance }}</p>
         </div>
-        <div class="card balance">
+        <div class="card">
           <h3>Active Customers</h3>
           <p>{{ active_customers }}</p>
         </div>
       </section>
-      
+
       <section class="activity-section">
         <h2>Recent Activity</h2>
-        <div class="activity-columns">
-          <div class="activity-column">
-            <h3>🧾 Latest Transactions</h3>
-            <ul class="activity-list">
-              {% for tx in recent_transactions %}
-                <li> {{ tx.transaction_type.title() }} of ${{ tx.amount }} by {{ tx.customer_name }} on {{ tx.transaction_date.strftime('%b %d, %Y') }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="activity-column">
-            <h3> Latest Payments</h3>
-            <ul class="activity-list">
-              {% for p in recent_payments %}
-                <li> ${{ p.pay_amount }} paid by {{ p.customer_name }} on {{ p.payment_day.strftime('%b %d, %Y') }}</li>
-              {% endfor %}
-            </ul>
-          </div>
+
+        <div class="activity">
+          <h3>🧾 Latest Transactions</h3>
+          <ul>
+            {% for tx in recent_transactions %}
+              <li>{{ tx.transaction_type|capitalize }} of ${{ '%.2f' | format(tx.amount) }} by {{ tx.customer_name }} on {{ tx.transaction_date.strftime('%b %d, %Y') }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="activity">
+          <h3>💵 Latest Payments</h3>
+          <ul>
+            {% for p in recent_payments %}
+              <li>${{ '%.2f' | format(p.pay_amount) }} paid by {{ p.customer_name }} on {{ p.payment_day.strftime('%b %d, %Y') }}</li>
+            {% endfor %}
+          </ul>
         </div>
       </section>
     </main>

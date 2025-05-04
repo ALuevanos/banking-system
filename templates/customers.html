@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - CSUSB Bank</title>
+  <title>New Branch - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
 <body>
   <div class="container">
-    
     <aside class="sidebar">
       <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
       <h2 class="bank-name">CSUSB Bank</h2>
       <nav class="nav-links">
-        <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         <a href="/customers">Customers</a>
         <a href="/accounts">Accounts</a>
         <a href="/loans">Loans</a>
         <a href="/payments">Payments</a>
         <a href="/transactions">Transactions</a>
+        <a href="/branches" class="active">Branches</a>
         <a href="/logout">Logout</a>
       </nav>
     </aside>

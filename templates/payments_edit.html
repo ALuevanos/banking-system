@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Payment - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" class="sidebar-logo" />
+      <h2 class="bank-name">CSUSB Bank</h2>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/accounts">Accounts</a>
+        <a href="/loans">Loans</a>
+        <a href="/payments" class="active">Payments</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <h1>Edit Payment #{{ payment.payment_no }}</h1>
+      <form method="POST" class="form-box">
+        <label for="loan_id">Loan ID:</label>
+        <input type="number" name="loan_id" value="{{ payment.loan_id }}" required>
+
+        <label for="pay_amount">Payment Amount:</label>
+        <input type="number" name="pay_amount" step="0.01" value="{{ payment.pay_amount }}" required>
+
+        <label for="payment_day">Payment Date:</label>
+        <input type="date" name="payment_day" value="{{ payment.payment_day }}" required>
+
+        <button type="submit" class="btn">✅ Update Payment</button>
+        <a href="{{ url_for('payment_bp.view_payments') }}" class="btn danger">Cancel</a>
+      </form>
+    </main>
+  </div>
+</body>
+</html>

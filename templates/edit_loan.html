@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Loan - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
+      <h2 class="bank-name">CSUSB Bank</h2>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/accounts">Accounts</a>
+        <a href="/loans" class="active">Loans</a>
+        <a href="/payments">Payments</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <h1>Edit Loan</h1>
+      </div>
+
+      <section class="form-section">
+        <form method="POST" action="{{ url_for('loan_bp.edit_loan', loan_id=loan.loan_id) }}">
+          <div class="form-group">
+            <label for="amount">Loan Amount:</label>
+            <input type="number" name="amount" id="amount" value="{{ loan.amount }}" step="0.01" required />
+          </div>
+
+          <div class="form-group">
+            <label for="customer_id">Assign to Customer:</label>
+            <select name="customer_id" id="customer_id" required>
+              {% for customer in customers %}
+                <option value="{{ customer.customer_id }}" {% if customer.customer_id == current_customer_id %}selected{% endif %}>
+                  {{ customer.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn">💾 Update Loan</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

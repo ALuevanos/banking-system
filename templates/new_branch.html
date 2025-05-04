@@ -26,34 +26,28 @@
 
     <main class="main-content">
       <div class="topbar">
-        <h1>Loan Overview</h1>
-        <a href="{{ url_for('loan_bp.add_loan') }}" class="btn">➕ Add Loan</a>
+        <h1>Add New Branch</h1>
       </div>
 
-      <section class="content-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Loan ID</th>
-              <th>Customer Name</th>
-              <th>Loan Amount</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for loan in loans %}
-            <tr>
-              <td>{{ loan.loan_id }}</td>
-              <td>{{ loan.customer_name }}</td>
-              <td>${{ '%.2f' | format(loan.amount) }}</td>
-              <td>
-                <a href="{{ url_for('loan_bp.edit_loan', loan_id=loan.loan_id) }}" class="btn-sm">✏️ Edit</a>
-                <a href="{{ url_for('loan_bp.delete_loan', loan_id=loan.loan_id) }}" class="btn-sm danger" onclick="return confirm('Are you sure you want to delete this loan?')">🗑️ Delete</a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <section class="form-section">
+        <form method="POST">
+          <div class="form-group">
+            <label for="branch_id">Branch ID:</label>
+            <input type="text" id="branch_id" name="branch_id" required />
+          </div>
+
+          <div class="form-group">
+            <label for="branch_name">Branch Name:</label>
+            <input type="text" id="branch_name" name="branch_name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="branch_address">Address:</label>
+            <input type="text" id="branch_address" name="branch_address" required />
+          </div>
+
+          <button type="submit" class="btn">➕ Add Branch</button>
+        </form>
       </section>
     </main>
   </div>

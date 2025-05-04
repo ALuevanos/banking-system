@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Branch - CSUSB Bank</title>
+  <title>Employees - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
@@ -19,36 +19,38 @@
         <a href="/loans">Loans</a>
         <a href="/payments">Payments</a>
         <a href="/transactions">Transactions</a>
-        <a href="/branches" class="active">Branches</a>
+        <a href="/employees" class="active">Employees</a>
         <a href="/logout">Logout</a>
       </nav>
     </aside>
 
     <main class="main-content">
       <div class="topbar">
-        <h1>Loan Overview</h1>
-        <a href="{{ url_for('loan_bp.add_loan') }}" class="btn">➕ Add Loan</a>
+        <h1>Employee Records</h1>
+        <a href="{{ url_for('employee_bp.add_employee') }}" class="btn">➕ Add Employee</a>
       </div>
 
       <section class="content-table">
         <table>
           <thead>
             <tr>
-              <th>Loan ID</th>
-              <th>Customer Name</th>
-              <th>Loan Amount</th>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Start Date</th>
+              <th>Phone</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for loan in loans %}
+            {% for emp in employees %}
             <tr>
-              <td>{{ loan.loan_id }}</td>
-              <td>{{ loan.customer_name }}</td>
-              <td>${{ '%.2f' | format(loan.amount) }}</td>
+              <td>{{ emp.emp_id }}</td>
+              <td>{{ emp.name }}</td>
+              <td>{{ emp.start_date }}</td>
+              <td>{{ emp.phone_no }}</td>
               <td>
-                <a href="{{ url_for('loan_bp.edit_loan', loan_id=loan.loan_id) }}" class="btn-sm">✏️ Edit</a>
-                <a href="{{ url_for('loan_bp.delete_loan', loan_id=loan.loan_id) }}" class="btn-sm danger" onclick="return confirm('Are you sure you want to delete this loan?')">🗑️ Delete</a>
+                <a href="{{ url_for('employee_bp.edit_employee', emp_id=emp.emp_id) }}" class="btn-sm">✏️ Edit</a>
+                <a href="{{ url_for('employee_bp.delete_employee', emp_id=emp.emp_id) }}" class="btn-sm danger" onclick="return confirm('Delete this employee?')">🗑️ Delete</a>
               </td>
             </tr>
             {% endfor %}

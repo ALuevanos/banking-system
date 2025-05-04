@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Transaction - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+<body>
+  <div class="container">
+
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
+      <h2 class="bank-name">CSUSB Bank</h2>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/accounts">Accounts</a>
+        <a href="/loans">Loans</a>
+        <a href="/payments">Payments</a>
+        <a href="/transactions" class="active">Transactions</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <h1>Add Transaction</h1>
+      </div>
+
+      <section class="form-section">
+        <form method="POST" class="form">
+          <label for="account_no">Account ID</label>
+          <select name="account_no" required>
+            {% for acc in accounts %}
+              <option value="{{ acc.account_id }}">{{ acc.account_id }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="amount">Amount</label>
+          <input type="number" step="0.01" name="amount" required />
+
+          <label for="transaction_type">Transaction Type</label>
+          <select name="transaction_type" required>
+            <option value="deposit">Deposit</option>
+            <option value="withdrawal">Withdrawal</option>
+          </select>
+
+          <button type="submit" class="btn">Submit Transaction</button>
+        </form>
+      </section>
+    </main>
+
+  </div>
+</body>
+</html>

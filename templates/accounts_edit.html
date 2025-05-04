@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Account - CSUSB Bank</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
+      <h2 class="bank-name">CSUSB Bank</h2>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/accounts" class="active">Accounts</a>
+        <a href="/loans">Loans</a>
+        <a href="/payments">Payments</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <h1>Edit Account</h1>
+      </div>
+
+      <section class="form-section">
+        <form method="POST">
+          <div class="form-group">
+            <label for="account_id">Account ID</label>
+            <input type="text" id="account_id" name="account_id" value="{{ account.account_id }}" disabled />
+          </div>
+
+          <div class="form-group">
+            <label for="balance">Balance</label>
+            <input type="number" step="0.01" id="balance" name="balance" value="{{ account.balance }}" required />
+          </div>
+
+          {% if account.overdraft_amount is defined %}
+          <div class="form-group">
+            <label for="overdraft_amount">Overdraft Amount</label>
+            <input type="number" step="0.01" id="overdraft_amount" name="overdraft_amount" value="{{ account.overdraft_amount }}" />
+          </div>
+          {% endif %}
+
+          {% if account.interest_rate is defined %}
+          <div class="form-group">
+            <label for="interest_rate">Interest Rate (%)</label>
+            <input type="number" step="0.01" id="interest_rate" name="interest_rate" value="{{ account.interest_rate }}" />
+          </div>
+          {% endif %}
+
+          <div class="form-actions">
+            <button type="submit" class="btn">Update</button>
+            <a href="{{ url_for('account.view_accounts') }}" class="btn cancel">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
