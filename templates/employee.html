@@ -50,8 +50,8 @@
               <td>{{ emp.start_date }}</td>
               <td>{{ emp.phone_no }}</td>
               <td>
-                <a href="{{ url_for('employee_bp.edit_employee', emp_id=emp.emp_id) }}" class="btn-sm">✏️ Edit</a>
-                <a href="{{ url_for('employee_bp.delete_employee', emp_id=emp.emp_id) }}" class="btn-sm danger" onclick="return confirm('Delete this employee?')">🗑️ Delete</a>
+                <a href="{{ url_for('employee_bp.edit_employee', emp_id=emp.emp_id) }}" class="btn-sm"> Edit</a>
+                <a href="{{ url_for('employee_bp.delete_employee', emp_id=emp.emp_id) }}" class="btn-sm danger" onclick="return confirm('Delete this employee?')"> Delete</a>
               </td>
             </tr>
             {% endfor %}

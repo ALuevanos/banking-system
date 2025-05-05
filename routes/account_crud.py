@@ -9,9 +9,14 @@ def view_accounts():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-        SELECT a.account_id, a.balance, a.customer_id, c.name AS customer_name
+        SELECT a.account_id, a.balance, a.customer_id, a.account_type,
+               c.name AS customer_name,
+               ca.overdraft_amount,
+               sa.interest_rate
         FROM account a
         JOIN customer c ON a.customer_id = c.customer_id
+        LEFT JOIN checking_account ca ON a.account_id = ca.account_id
+        LEFT JOIN saving_account sa ON a.account_id = sa.account_id
     """)
     accounts = cursor.fetchall()
     cursor.close()
@@ -31,12 +36,20 @@ def create_account():
         account_id = request.form['account_id']
         balance = request.form['balance']
         customer_id = request.form['customer_id']
+        account_type = request.form['account_type']
 
         try:
             cursor.execute("""
-                INSERT INTO account (account_id, balance, customer_id)
-                VALUES (%s, %s, %s)
-            """, (account_id, balance, customer_id))
+                INSERT INTO account (account_id, balance, customer_id, account_type)
+                VALUES (%s, %s, %s, %s)
+            """, (account_id, balance, customer_id, account_type))
+
+            # Also insert into correct account subtype table
+            if account_type == "Checking":
+                cursor.execute("INSERT INTO checking_account (account_id, overdraft_amount) VALUES (%s, %s)", (account_id, 0.00))
+            elif account_type == "Savings":
+                cursor.execute("INSERT INTO saving_account (account_id, interest_rate) VALUES (%s, %s)", (account_id, 1.5))
+
             conn.commit()
             flash('Account created successfully.', 'success')
             return redirect(url_for('account.view_accounts'))
@@ -72,17 +85,15 @@ def edit_account(account_id):
     conn.close()
     return render_template('accounts_edit.html', account=account)
 
+# Delete account
 @account_bp.route('/accounts/delete/<account_id>')
 def delete_account(account_id):
     conn = get_connection()
     cursor = conn.cursor()
     try:
-        # Delete from dependent tables first
         cursor.execute("DELETE FROM transaction WHERE account_no = %s", (account_id,))
         cursor.execute("DELETE FROM checking_account WHERE account_id = %s", (account_id,))
         cursor.execute("DELETE FROM saving_account WHERE account_id = %s", (account_id,))
-        
-        # Then delete from account table
         cursor.execute("DELETE FROM account WHERE account_id = %s", (account_id,))
         conn.commit()
         flash('Account deleted successfully.', 'success')
@@ -94,5 +105,3 @@ def delete_account(account_id):
         conn.close()
     
     return redirect(url_for('account.view_accounts'))
-
-

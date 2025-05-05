@@ -92,19 +92,31 @@ def register():
         try:
             cursor.execute("INSERT INTO customer (customer_id, name, password) VALUES (%s, %s, %s)",
                            (new_customer_id, name, password))
-            cursor.execute("INSERT INTO account (account_id, balance, customer_id) VALUES (%s, %s, %s)",
-                           (str(int(new_customer_id) + 1000), 0.00, new_customer_id))
+
+            checking_id = str(int(new_customer_id) + 1000)
+            savings_id = str(int(new_customer_id) + 2000)
+
+            # Insert Checking account
+            cursor.execute("INSERT INTO account (account_id, balance, customer_id, account_type) VALUES (%s, %s, %s, %s)",
+                           (checking_id, 0.00, new_customer_id, 'Checking'))
+
+            # Insert Savings account
+            cursor.execute("INSERT INTO account (account_id, balance, customer_id, account_type) VALUES (%s, %s, %s, %s)",
+                           (savings_id, 0.00, new_customer_id, 'Savings'))
+
             conn.commit()
             flash(f'Registration successful! Your Customer ID is {new_customer_id}. Please login.', 'success')
             return redirect(url_for('customer_login'))
+
         except Exception as e:
             conn.rollback()
-            flash(f'Registration failed: {str(e)}', 'danger')
+            flash(f'Registration failed: {str(e)}", "danger')
         finally:
             cursor.close()
             conn.close()
 
     return render_template('register.html')
+
 
 # --------------------------- ADMIN DASHBOARD ---------------------------
 @app.route('/dashboard')
@@ -167,67 +179,81 @@ def deposit():
     if 'customer_id' not in session:
         return redirect(url_for('customer_login'))
 
-    if request.method == 'POST':
-        amount = float(request.form['amount'])
-        customer_id = session['customer_id']
+    customer_id = session['customer_id']
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
 
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE account SET balance = balance + %s WHERE customer_id = %s", (amount, customer_id))
+    # Get all accounts (savings/checking) for the logged-in customer
+    cursor.execute("SELECT account_id, account_type FROM account WHERE customer_id = %s", (customer_id,))
+    accounts = cursor.fetchall()
+
+    if request.method == 'POST':
+        account_id = request.form['account_id']
+        amount = float(request.form['amount'])
+
+        # Update balance
+        cursor.execute("UPDATE account SET balance = balance + %s WHERE account_id = %s", (amount, account_id))
+
+        # Insert transaction
         cursor.execute("""
             INSERT INTO transaction (account_no, amount, transaction_type, transaction_date)
-            VALUES (
-                (SELECT account_id FROM account WHERE customer_id = %s),
-                %s,
-                'deposit',
-                NOW()
-            )
-        """, (customer_id, amount))
+            VALUES (%s, %s, 'deposit', NOW())
+        """, (account_id, amount))
+
         conn.commit()
+        flash("Deposit successful!", "success")
         cursor.close()
         conn.close()
+        return redirect(url_for('customer.customer_dashboard'))
 
-        flash("Deposit successful!", "success")
-        return redirect('/customer_dashboard')
+    cursor.close()
+    conn.close()
+    return render_template('deposit.html', accounts=accounts)
 
-    return render_template('deposit.html')
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():
     if 'customer_id' not in session:
         return redirect(url_for('customer_login'))
 
+    customer_id = session['customer_id']
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get all accounts (Checking & Savings) for this customer
+    cursor.execute("SELECT account_id, account_type FROM account WHERE customer_id = %s", (customer_id,))
+    accounts = cursor.fetchall()
+
     if request.method == 'POST':
+        account_id = request.form['account_id']
         amount = float(request.form['amount'])
-        customer_id = session['customer_id']
 
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute("SELECT balance FROM account WHERE customer_id = %s", (customer_id,))
+        # Check balance for selected account
+        cursor.execute("SELECT balance FROM account WHERE account_id = %s", (account_id,))
         balance = cursor.fetchone()['balance']
 
         if amount > balance:
             flash("Insufficient funds!", "danger")
         else:
-            cursor.execute("UPDATE account SET balance = balance - %s WHERE customer_id = %s", (amount, customer_id))
+            # Deduct balance
+            cursor.execute("UPDATE account SET balance = balance - %s WHERE account_id = %s", (amount, account_id))
+
+            # Log transaction
             cursor.execute("""
                 INSERT INTO transaction (account_no, amount, transaction_type, transaction_date)
-                VALUES (
-                    (SELECT account_id FROM account WHERE customer_id = %s),
-                    %s,
-                    'withdrawal',
-                    NOW()
-                )
-            """, (customer_id, amount))
+                VALUES (%s, %s, 'withdrawal', NOW())
+            """, (account_id, amount))
+
             conn.commit()
             flash("Withdrawal successful!", "success")
+            cursor.close()
+            conn.close()
+            return redirect(url_for('customer.customer_dashboard'))
 
-        cursor.close()
-        conn.close()
-        return redirect('/customer_dashboard')
+    cursor.close()
+    conn.close()
+    return render_template('withdraw.html', accounts=accounts)
 
-    return render_template('withdraw.html')
 
 @app.route('/pay_loan', methods=['GET', 'POST'])
 def pay_loan():

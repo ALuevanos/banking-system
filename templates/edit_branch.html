@@ -5,38 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Edit Branch - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
-  <style>
-    .sidebar {
-      width: 220px;
-      background-color: #0d6efd;
-      min-height: 100vh;
-      color: white;
-    }
-    .sidebar-logo {
-      width: 100px;
-      margin: 20px auto;
-      display: block;
-    }
-    .bank-name {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .nav-links a {
-      display: block;
-      padding: 10px 20px;
-      color: white;
-      text-decoration: none;
-    }
-    .nav-links a.active, .nav-links a:hover {
-      background-color: #0b5ed7;
-    }
-  </style>
 </head>
 <body>
-  <div class="d-flex">
-    <!-- Sidebar -->
+  <div class="container">
     <aside class="sidebar">
       <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="CSUSB Logo" class="sidebar-logo" />
       <h2 class="bank-name">CSUSB Bank</h2>
@@ -53,19 +25,16 @@
       </nav>
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-grow-1 p-5">
-      <h2 class="mb-4">Edit Branch</h2>
-      <form method="POST" style="max-width: 500px;">
-        <div class="mb-3">
-          <label for="branch_name" class="form-label">Branch Name:</label>
-          <input type="text" class="form-control" id="branch_name" name="branch_name" value="{{ branch.branch_name }}" required>
-        </div>
-        <div class="mb-3">
-          <label for="location" class="form-label">Location:</label>
-          <input type="text" class="form-control" id="location" name="location" value="{{ branch.location }}" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Update Branch</button>
+    <main class="main-content">
+      <h1>Edit Branch</h1>
+      <form action="{{ url_for('branch_bp.edit_branch', branch_id=branch.branch_id) }}" method="POST">
+        <label for="branch_name">Branch Name:</label>
+        <input type="text" id="branch_name" name="branch_name" value="{{ branch.branch_name or '' }}" required />
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ branch.location or '' }}" required />
+
+        <button type="submit" class="btn">Update Branch</button>
       </form>
     </main>
   </div>

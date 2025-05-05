@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Branch - CSUSB Bank</title>
+  <title>Accounts - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
@@ -15,7 +15,7 @@
       <nav class="nav-links">
         <a href="/dashboard">Dashboard</a>
         <a href="/customers">Customers</a>
-        <a href="/accounts"class="active">Accounts</a>
+        <a href="/accounts" class="active">Accounts</a>
         <a href="/loans">Loans</a>
         <a href="/payments">Payments</a>
         <a href="/transactions">Transactions</a>
@@ -24,7 +24,6 @@
         <a href="/logout">Logout</a>
       </nav>
     </aside>
-
 
     <main class="main-content">
       <div class="topbar">
@@ -38,6 +37,7 @@
             <tr>
               <th>Customer Name</th>
               <th>Account ID</th>
+              <th>Account Type</th>
               <th>Balance</th>
               <th>Overdraft (Checking)</th>
               <th>Interest Rate (Saving)</th>
@@ -49,17 +49,18 @@
             <tr>
               <td>{{ account.customer_name }}</td>
               <td>{{ account.account_id }}</td>
+              <td>{{ account.account_type or 'None' }}</td>
               <td>${{ '%.2f' | format(account.balance) }}</td>
               <td>
-                {% if account.overdraft_amount %}
-                  ${{ '%.2f' | format(account.overdraft_amount) }}
+                {% if account.account_type == 'Checking' %}
+                  Yes
                 {% else %}
                   -
                 {% endif %}
               </td>
               <td>
-                {% if account.interest_rate %}
-                  {{ account.interest_rate }}%
+                {% if account.account_type == 'Savings' %}
+                  1.5%
                 {% else %}
                   -
                 {% endif %}

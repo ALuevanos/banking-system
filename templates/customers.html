@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Branch - CSUSB Bank</title>
+  <title>Customers - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
@@ -14,7 +14,7 @@
       <h2 class="bank-name">CSUSB Bank</h2>
       <nav class="nav-links">
         <a href="/dashboard">Dashboard</a>
-        <a href="/customers"class="active">Customers</a>
+        <a href="/customers" class="active">Customers</a>
         <a href="/accounts">Accounts</a>
         <a href="/loans">Loans</a>
         <a href="/payments">Payments</a>
@@ -27,7 +27,7 @@
     
     <main class="main-content">
       <div class="topbar">
-        <h1>👥 Customer List</h1>
+        <h1>Client List</h1>
         <input type="text" class="search-bar" placeholder="Search by name..." />
       </div>
 
@@ -38,7 +38,8 @@
               <th>ID</th>
               <th>Name</th>
               <th>Address</th>
-              <th>Phone</th>
+              <th>Phone Number</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -46,8 +47,14 @@
             <tr>
               <td>{{ customer.customer_id }}</td>
               <td>{{ customer.name }}</td>
-              <td>{{ customer.address }}</td>
-              <td>{{ customer.phone }}</td>
+              <td>{{ customer.address or 'None' }}</td>
+              <td>{{ customer.phone or 'None' }}</td>
+              <td>
+                <a href="{{ url_for('customer.edit_customer', customer_id=customer.customer_id) }}" class="btn-sm"> Edit</a>
+                <form method="POST" action="{{ url_for('customer.delete_customer', customer_id=customer.customer_id) }}" style="display:inline;" onsubmit="return confirm('Delete this customer?')">
+                  <button type="submit" class="btn-sm danger"> Delete</button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -56,7 +63,6 @@
     </main>
   </div>
 
-  
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const searchInput = document.querySelector(".search-bar");

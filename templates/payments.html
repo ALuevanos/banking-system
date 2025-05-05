@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Branch - CSUSB Bank</title>
+  <title>Payments - CSUSB Bank</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
 </head>
@@ -17,7 +17,7 @@
         <a href="/customers">Customers</a>
         <a href="/accounts">Accounts</a>
         <a href="/loans">Loans</a>
-        <a href="/payments"class="active">Payments</a>
+        <a href="/payments" class="active">Payments</a>
         <a href="/transactions">Transactions</a>
         <a href="/branches">Branches</a>
         <a href="/employees">Employees</a>
@@ -52,10 +52,14 @@
               <td>${{ '%.2f' | format(p.pay_amount) }}</td>
               <td>{{ p.payment_day.strftime('%b %d, %Y') }}</td>
               <td>
-                <a href="{{ url_for('payment_bp.edit_payment', payment_no=p.payment_no) }}" class="btn-sm">✏️ Edit</a>
-                <form method="POST" action="{{ url_for('payment_bp.delete_payment', payment_no=p.payment_no) }}" style="display:inline;" onsubmit="return confirm('Delete this payment?')">
-                  <button type="submit" class="btn-sm danger">🗑️ Delete</button>
-                </form>
+                {% if p.payment_no %}
+                  <a href="{{ url_for('payment_bp.edit_payment', payment_no=p.payment_no) }}" class="btn-sm"> Edit</a>
+                  <form method="POST" action="{{ url_for('payment_bp.delete_payment', payment_no=p.payment_no) }}" style="display:inline;" onsubmit="return confirm('Delete this payment?')">
+                    <button type="submit" class="btn-sm danger"> Delete</button>
+                  </form>
+                {% else %}
+                  <span class="btn-sm disabled">Missing ID</span>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}

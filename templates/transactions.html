@@ -54,9 +54,9 @@
               <td>${{ '%.2f'|format(t.amount) }}</td>
               <td>{{ t.transaction_date }}</td>
               <td>
-                <a href="{{ url_for('transaction_bp.edit_transaction', transaction_id=t.transaction_id) }}" class="btn-sm">✏️ Edit</a>
+                <a href="{{ url_for('transaction_bp.edit_transaction', transaction_id=t.transaction_id) }}" class="btn-sm"> Edit</a>
                 <form action="{{ url_for('transaction_bp.delete_transaction', transaction_id=t.transaction_id) }}" method="post" style="display:inline;">
-                  <button type="submit" class="btn-sm danger" onclick="return confirm('Are you sure?')">🗑️ Delete</button>
+                  <button type="submit" class="btn-sm danger" onclick="return confirm('Are you sure?')"> Delete</button>
                 </form>
               </td>
             </tr>

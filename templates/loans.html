@@ -48,8 +48,8 @@
               <td>{{ loan.customer_name }}</td>
               <td>${{ '%.2f' | format(loan.amount) }}</td>
               <td>
-                <a href="{{ url_for('loan_bp.edit_loan', loan_id=loan.loan_id) }}" class="btn-sm">✏️ Edit</a>
-                <a href="{{ url_for('loan_bp.delete_loan', loan_id=loan.loan_id) }}" class="btn-sm danger" onclick="return confirm('Are you sure you want to delete this loan?')">🗑️ Delete</a>
+                <a href="{{ url_for('loan_bp.edit_loan', loan_id=loan.loan_id) }}" class="btn-sm"> Edit</a>
+                <a href="{{ url_for('loan_bp.delete_loan', loan_id=loan.loan_id) }}" class="btn-sm danger" onclick="return confirm('Are you sure you want to delete this loan?')">Delete</a>
               </td>
             </tr>
             {% endfor %}

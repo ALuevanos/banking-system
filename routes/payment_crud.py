@@ -3,6 +3,7 @@ from db_config import get_connection
 
 payment_bp = Blueprint('payment_bp', __name__)
 
+# View all payments
 @payment_bp.route('/payments')
 def view_payments():
     if 'admin' not in session:
@@ -10,6 +11,7 @@ def view_payments():
 
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
+
     cursor.execute("""
         SELECT p.payment_no, p.pay_amount, p.payment_day, p.loan_id, c.name AS customer_name
         FROM payment p
@@ -20,13 +22,15 @@ def view_payments():
     payments = cursor.fetchall()
 
     cursor.execute("SELECT SUM(pay_amount) AS total_collected FROM payment")
-    total_result = cursor.fetchone()
-    total_collected = total_result['total_collected'] or 0
+    total_collected = cursor.fetchone()['total_collected'] or 0
 
     cursor.close()
     conn.close()
+
     return render_template('payments.html', payments=payments, total_collected=total_collected)
 
+
+# Add payment
 @payment_bp.route('/payments/add', methods=['GET', 'POST'])
 def add_payment():
     if 'admin' not in session:
@@ -39,23 +43,26 @@ def add_payment():
 
         conn = get_connection()
         cursor = conn.cursor()
+
         try:
             cursor.execute("""
                 INSERT INTO payment (loan_id, pay_amount, payment_day)
                 VALUES (%s, %s, %s)
             """, (loan_id, pay_amount, payment_day))
             conn.commit()
-            flash('Payment added successfully', 'success')
+            flash('Payment added successfully.', 'success')
             return redirect(url_for('payment_bp.view_payments'))
         except Exception as e:
             conn.rollback()
-            flash(f'Error: {str(e)}', 'danger')
+            flash(f'Error adding payment: {str(e)}', 'danger')
         finally:
             cursor.close()
             conn.close()
 
     return render_template('payments_add.html')
 
+
+# Edit payment
 @payment_bp.route('/payments/edit/<int:payment_no>', methods=['GET', 'POST'])
 def edit_payment(payment_no):
     if 'admin' not in session:
@@ -76,19 +83,22 @@ def edit_payment(payment_no):
                 WHERE payment_no = %s
             """, (loan_id, pay_amount, payment_day, payment_no))
             conn.commit()
-            flash('Payment updated successfully', 'success')
+            flash('Payment updated successfully.', 'success')
             return redirect(url_for('payment_bp.view_payments'))
         except Exception as e:
             conn.rollback()
-            flash(f'Error: {str(e)}', 'danger')
+            flash(f'Error updating payment: {str(e)}', 'danger')
 
     cursor.execute("SELECT * FROM payment WHERE payment_no = %s", (payment_no,))
     payment = cursor.fetchone()
+
     cursor.close()
     conn.close()
 
     return render_template('payments_edit.html', payment=payment)
 
+
+# Delete payment
 @payment_bp.route('/payments/delete/<int:payment_no>', methods=['POST'])
 def delete_payment(payment_no):
     if 'admin' not in session:
@@ -96,13 +106,14 @@ def delete_payment(payment_no):
 
     conn = get_connection()
     cursor = conn.cursor()
+
     try:
         cursor.execute("DELETE FROM payment WHERE payment_no = %s", (payment_no,))
         conn.commit()
-        flash('Payment deleted successfully', 'success')
+        flash('Payment deleted successfully.', 'success')
     except Exception as e:
         conn.rollback()
-        flash(f'Error: {str(e)}', 'danger')
+        flash(f'Error deleting payment: {str(e)}', 'danger')
     finally:
         cursor.close()
         conn.close()

@@ -1,20 +1,41 @@
-{% extends 'layout.html' %}
-{% block content %}
-<div class="container mt-5">
-  <div class="card p-4 shadow">
-    <h3 class="text-center mb-4">Withdraw Funds</h3>
-    <form method="POST">
-      <div class="mb-3">
-        <label for="amount" class="form-label">Amount:</label>
-        <input type="number" class="form-control" name="amount" min="1" step="0.01" required>
-      </div>
-      <div class="d-grid">
-        <button type="submit" class="btn btn-warning">Withdraw</button>
-      </div>
-    </form>
-    <div class="text-center mt-3">
-      <a href="{{ url_for('customer.customer_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraw Funds</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .btn-withdraw {
+            background-color: #ffc107;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container shadow p-4 rounded bg-white">
+        <h2 class="text-center mb-4">Withdraw Funds</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="account_id" class="form-label">Select Account:</label>
+                <select name="account_id" id="account_id" class="form-select" required>
+                    {% for acc in accounts %}
+                        <option value="{{ acc.account_id }}">{{ acc.account_type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount:</label>
+                <input type="number" name="amount" id="amount" class="form-control" step="0.01" min="0" required>
+            </div>
+            <button type="submit" class="btn btn-withdraw w-100">Withdraw</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('customer.customer_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
     </div>
-  </div>
-</div>
-{% endblock %}
+</body>
+</html>

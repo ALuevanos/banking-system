@@ -30,20 +30,22 @@ def add_branch():
         conn = get_connection()
         cursor = conn.cursor()
         try:
-            cursor.execute("INSERT INTO branch (branch_name, location) VALUES (%s, %s)", (branch_name, location))
+            cursor.execute(
+                "INSERT INTO branch (branch_name, location) VALUES (%s, %s)",
+                (branch_name, location)
+            )
             conn.commit()
             flash('Branch added successfully!', 'success')
             return redirect(url_for('branch_bp.view_branches'))
         except Exception as e:
             conn.rollback()
-            flash(f'Error: {str(e)}', 'danger')
+            flash(f'Error adding branch: {e}', 'danger')
         finally:
             cursor.close()
             conn.close()
 
     return render_template('add_branch.html')
 
-# Edit a branch
 @branch_bp.route('/branches/edit/<int:branch_id>', methods=['GET', 'POST'])
 def edit_branch(branch_id):
     if 'admin' not in session:
@@ -53,11 +55,11 @@ def edit_branch(branch_id):
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        branch_name = request.form['branch_name']
-        location = request.form['location']
+        name = request.form['name']
+        city = request.form['city']
         try:
-            cursor.execute("UPDATE branch SET branch_name = %s, location = %s WHERE branch_id = %s",
-                           (branch_name, location, branch_id))
+            cursor.execute("UPDATE branch SET name = %s, city = %s WHERE branch_id = %s",
+                           (name, city, branch_id))
             conn.commit()
             flash('Branch updated successfully!', 'success')
             return redirect(url_for('branch_bp.view_branches'))
@@ -72,7 +74,7 @@ def edit_branch(branch_id):
     return render_template('edit_branch.html', branch=branch)
 
 # Delete a branch
-@branch_bp.route('/branches/delete/<int:branch_id>')
+@branch_bp.route('/branches/delete/<int:branch_id>', methods=['GET'])
 def delete_branch(branch_id):
     if 'admin' not in session:
         return redirect('/login')
@@ -85,7 +87,7 @@ def delete_branch(branch_id):
         flash('Branch deleted successfully!', 'success')
     except Exception as e:
         conn.rollback()
-        flash(f'Error: {str(e)}', 'danger')
+        flash(f'Error deleting branch: {e}', 'danger')
     finally:
         cursor.close()
         conn.close()
